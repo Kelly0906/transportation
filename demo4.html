@@ -7,37 +7,37 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE html>
 <html>
 <head>
-<title>Public transportation</title>
-<!-- for-mobile-apps -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Turbine Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
-Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+	<title>Public transportation</title>
+	<!-- for-mobile-apps -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="Turbine Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+	Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
-		function hideURLbar(){ window.scrollTo(0,1); } </script>
-<!-- //for-mobile-apps -->
-<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
-<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
- <link rel='stylesheet' type='text/css' href='css/jquery.easy-gallery.css' />
-<!-- js -->
-<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-<!-- //js -->
-<link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700' rel='stylesheet' type='text/css'>
-<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
-<!-- start-smoth-scrolling -->
-<script type="text/javascript" src="js/move-top.js"></script>
-<script type="text/javascript" src="js/easing.js"></script>
-<script type="text/javascript">
-	jQuery(document).ready(function($) {
-		$(".scroll").click(function(event){		
-			event.preventDefault();
-			$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+			function hideURLbar(){ window.scrollTo(0,1); } </script>
+	<!-- //for-mobile-apps -->
+	<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+	 <link rel='stylesheet' type='text/css' href='css/jquery.easy-gallery.css' />
+	<!-- js -->
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<!-- //js -->
+	<link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700' rel='stylesheet' type='text/css'>
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+	<!-- start-smoth-scrolling -->
+	<script type="text/javascript" src="js/move-top.js"></script>
+	<script type="text/javascript" src="js/easing.js"></script>
+	<script type="text/javascript">
+		jQuery(document).ready(function($) {
+			$(".scroll").click(function(event){		
+				event.preventDefault();
+				$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+			});
 		});
-	});
-</script>
-<!-- start-smoth-scrolling -->
+	</script>
+	<!-- start-smoth-scrolling -->
 
 </head>
 
@@ -236,28 +236,40 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         // setting the opacity of the polyline to 0, and drawing an opaque symbol
         // at a regular interval on the polyline.
 
+        	var browserSupportFlag =  new Boolean();
+
+
         function initMap() {
             var map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 14,
                 center: { lat: 25.1023554, lng: 121.5463038 },
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
             });
-              // Construct the circle for each value in citymap.
-			  // Note: We scale the area of the circle based on the population.
-			  for (var city in citymap) {
-			    // Add the circle for this city to the map.
-			    var cityCircle = new google.maps.Circle({
-			      strokeColor: 'yellow',
-			      strokeOpacity: 0.8,
-			      strokeWeight: 2,
-			      fillColor: 'yellow',
-			      fillOpacity: 0.35,
-			      map: map,
-			      center: citymap[city].center,
-			      radius: Math.sqrt(citymap[city].population) * 100
+
+			  if(navigator.geolocation) {
+			    browserSupportFlag = true;
+			    navigator.geolocation.getCurrentPosition(function(position) {
+			      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+			      map.setCenter(initialLocation);
+			    }, function() {
+			      handleNoGeolocation(browserSupportFlag);
 			    });
 			  }
-
+			  // Browser doesn't support Geolocation
+			  else {
+			    browserSupportFlag = false;
+			    handleNoGeolocation(browserSupportFlag);
+			  }
+			  
+			  function handleNoGeolocation(errorFlag) {
+			    if (errorFlag == true) {
+			      alert("地圖定位失敗");
+			    } else {
+			      alert("您的瀏覽器不支援定位服務");
+			    }
+				initialLocation = taipei;
+			    map.setCenter(initialLocation);
+			  }
 
 
         }
